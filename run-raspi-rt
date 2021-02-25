@@ -62,12 +62,35 @@ function do_add_repos()
 	target_pi_cli run "${full_cmd}"
 }
 
-function do_install_kernel()
+function do_install_pkgs()
 {
-	local kernel=${1}
+	local debs pkgs p cmd
 
-	pr_info "Install kernel: ${kernel}"
-	target_pi_cli run "sudo apt-get --yes install ${kernel}"
+	debs=()
+	rdebs=()
+	pkgs=()
+	for p in "${@}" ; do
+		if [ -f "${p}" ] ; then
+			debs+=("${p}")
+			rdebs+=("${p##*/}")
+		else
+			pkgs+=("${p}")
+		fi
+	done
+
+	cmd=
+	if [ "${#debs[@]}" -gt 0 ] ; then
+		pr_info "Put packages: ${debs[*]}"
+		target_pi_cli put "${debs[@]}" .
+		cmd="sudo dpkg --force-all --install ${rdebs[*]}"
+	fi
+	if [ "${#pkgs[@]}" -gt 0 ] ; then
+		cmd="${cmd} && sudo apt-get --yes install ${pkgs[*]}"
+	fi
+	cmd=${cmd# && }
+
+	pr_info "Install packages: ${pkgs[*]} ${debs[*]}"
+	target_pi_cli run "${cmd}"
 }
 
 function do_reboot()
@@ -99,7 +122,7 @@ function do_run_rt_tests()
 function usage()
 {
 	cat <<EOF
-Usage: run-raspi-rt [-h] [-i IMAGE] [-k KERNEL] [-r REPO] [-v VERSION] HOST
+Usage: run-raspi-rt [-h] [-i IMAGE] [-p PKG] [-r REPO] [-v VERSION] HOST
 
 Run the raspi-rt tests on a remote Raspberry Pi host.
 
@@ -110,7 +133,8 @@ Optional arguments:
   -h, --help             Show this help text and exit.
   -i, --image IMAGE      Update the host to image <IMAGE> before running the
                          tests.
-  -k, --kernel KERNEL    Install the kernel <KERNEL> before running the tests.
+  -p, --package PKG      Install the specified package <PKG> before running
+                         the tests. Can be provided multiple times.
   -r, --repo REPO        Add APT repo <REPO> to the host. Can be provided
                          multiple times.
   -v, --version VERSION  Install the specific kernel version <VERSION>.
@@ -119,7 +143,7 @@ EOF
 
 HOST=
 image=
-kernel=
+pkgs=()
 repos=()
 version=
 
@@ -133,9 +157,9 @@ while [ "${#}" -gt 0 ] ; do
 			shift
 			image=${1}
 			;;
-		-k|--kernel)
+		-p|--package)
 			shift
-			kernel=${1}
+			pkgs+=("${1}")
 			;;
 		-r|--repo)
 			shift
@@ -178,26 +202,10 @@ if [ "${#repos[@]}" -gt 0 ] ; then
 	do_add_repos "${repos[@]}"
 fi
 
-# Install, reboot and check the kernel
-if [ -n "${kernel}" ] ; then
-	if [ -n "${version}" ] ; then
-		do_install_kernel "${kernel}=${version}"
-	else
-		do_install_kernel "${kernel}"
-	fi
+# Install the packages
+if [ "${#pkgs[@]}" -gt 0 ] ; then
+	do_install_pkgs "${pkgs[@]}"
 	do_reboot
-	if [ -n "${version}" ] ; then
-		# Determine the abi from the (package) version
-		readarray -t c < <(echo "${version}" | tr '.-' '\n')
-		abi="${c[0]}.${c[1]}.${c[2]}-${c[3]}"
-
-		# Determine the flavor name from the (package) name
-		flavor=${kernel%-unstable}
-		flavor=${flavor#linux-}
-
-		# Check the running kernel
-		do_check_kernel "${abi}-${flavor}"
-	fi
 fi
 
 # Show system info
