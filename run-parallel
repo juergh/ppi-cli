@@ -1,0 +1,71 @@
+#!/bin/bash -eu
+
+function out()
+{
+	local rc=${?}
+	local fail host
+
+	trap - EXIT INT TERM HUP
+
+	echo "-- Individual results:"
+	fail=0
+	for host in "${HOSTS[@]}" ; do
+		result=$(tail -1 "${host}".log)
+		printf "%-25s: %s\n" "${host}" "${result}"
+		case "${result}" in
+			PASSED) ;;
+			*) fail=1 ;;
+		esac
+	done
+
+	if [ "${rc}" -eq 0 ] && [ "${fail}" -eq 1 ] ; then
+		rc=1
+	fi
+
+	if [ "${rc}" -eq 0 ] ; then
+		echo "-- Final result: PASSED"
+	else
+		echo "-- Final result: FAILED" >&2
+	fi
+
+	exit "${rc}"
+}
+
+function do_run()
+{
+	local host=${1}
+	shift
+
+	if "${@}" > "${host}".log 2>&1 ; then
+		echo "PASSED" >> "${host}".log
+	else
+		echo "FAILED" >> "${host}".log
+	fi
+}
+
+# Read the hosts from stdin
+HOSTS=()
+while read -r host ; do
+	HOSTS+=("${host}")
+done
+
+trap out EXIT INT TERM HUP
+
+# Run the commands in parallel on the provided hosts
+for host in "${HOSTS[@]}"; do
+	cmd=()
+	for arg in "${@}" ; do
+		if [ "${arg}" = "{}" ] ; then
+			cmd+=("${host}")
+		else
+			cmd+=("${arg}")
+		fi
+	done
+
+	echo "-- Run ${cmd[*]}"
+	do_run "${host}" "${cmd[@]}" &
+done
+
+# Wait for all commands to finish
+echo "-- Wait for commands(s) to finish"
+wait
