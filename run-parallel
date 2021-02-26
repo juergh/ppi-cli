@@ -1,5 +1,8 @@
 #!/bin/bash -eu
 
+function pr_passed() { echo -ne "\e[32mPASSED\e[0m" ; }
+function pr_failed() { echo -ne "\e[31mFAILED\e[0m" ; }
+
 function out()
 {
 	local rc=${?}
@@ -7,25 +10,24 @@ function out()
 
 	trap - EXIT INT TERM HUP
 
-	echo "-- Individual results:"
+	echo "-- Results:"
 	fail=0
 	for host in "${HOSTS[@]}" ; do
 		result=$(tail -1 "${host}".log)
-		printf "%-25s: %s\n" "${host}" "${result}"
 		case "${result}" in
-			PASSED) ;;
-			*) fail=1 ;;
+			PASSED)
+				result=$(pr_passed)
+				;;
+			*)
+				result=$(pr_failed)
+				fail=1
+				;;
 		esac
+		printf "%-25s: %s\n" "${host}" "${result}"
 	done
 
 	if [ "${rc}" -eq 0 ] && [ "${fail}" -eq 1 ] ; then
 		rc=1
-	fi
-
-	if [ "${rc}" -eq 0 ] ; then
-		echo "-- Final result: PASSED"
-	else
-		echo "-- Final result: FAILED" >&2
 	fi
 
 	exit "${rc}"
