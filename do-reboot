@@ -1,0 +1,9 @@
+#!/bin/bash -eu
+#
+# Reboot systems
+#
+
+. ./env.sh
+cat | ./run-parallel \
+		  target-pi-cli "${RPI_MASTER}" {} \
+		  reboot "${@}"
