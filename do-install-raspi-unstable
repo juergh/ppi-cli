@@ -1,0 +1,16 @@
+#!/bin/bash -eu
+#
+# Install package(s)
+#
+
+cmds=(
+	"sudo apt-add-repository --yes --no-update --pocket proposed &&"
+	"sudo apt-add-repository --yes --no-update --ppa ppa:canonical-kernel-team/unstable &&"
+	"sudo apt-get --yes update &&"
+	"sudo apt-get --yes install linux-raspi-unstable"
+)
+
+. ./env.sh
+cat | ./run-parallel \
+		  target-pi-cli "${RPI_MASTER}" {} \
+		  run "${cmds[*]}"
