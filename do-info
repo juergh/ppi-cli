@@ -1,9 +1,0 @@
-#!/bin/bash -eu
-#
-# Show system information
-#
-
-. ./env.sh
-cat | ./run-parallel \
-		  target-pi-cli "${RPI_MASTER}" {} \
-		  info
