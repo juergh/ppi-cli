@@ -10,6 +10,7 @@ function out()
 
 	trap - EXIT INT TERM HUP
 
+	echo
 	echo "-- Results:"
 	fail=0
 	for host in "${HOSTS[@]}" ; do
@@ -50,6 +51,7 @@ function do_run_single()
 		RESULT="FAILED"
 	fi
 	echo "${RESULT}" >> "${host}".log
+	echo -n "."
 }
 
 function do_run()
