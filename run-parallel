@@ -33,16 +33,50 @@ function out()
 	exit "${rc}"
 }
 
-function do_run()
+function do_run_single()
 {
 	local host=${1}
 	shift
 
-	if "${@}" > "${host}".log 2>&1 ; then
-		echo "PASSED" >> "${host}".log
-	else
-		echo "FAILED" >> "${host}".log
+	if [ $# -eq 0 ] ; then
+		RESULT="PASSED"
+		return
 	fi
+
+	echo "RUN ${*}" >> "${host}".log
+	if "${@}" >> "${host}".log 2>&1 ; then
+		RESULT="PASSED"
+	else
+		RESULT="FAILED"
+	fi
+	echo "${RESULT}" >> "${host}".log
+}
+
+function do_run()
+{
+	local host=${1}
+	shift
+	local cmd
+
+	true > "${host}".log
+	cmd=()
+	while [ ${#} -gt 0 ] ; do
+		case "${1}" in
+			\;)
+				do_run_single "${host}" "${cmd[@]}"
+				if [ "${RESULT}" = "FAILED" ] ; then
+					# Bail out on first failure
+					return
+				fi
+				cmd=()
+				;;
+			*)
+				cmd+=("${1}")
+				;;
+		esac
+		shift
+	done
+	do_run_single "${host}" "${cmd[@]}"
 }
 
 # Read the hosts from stdin
