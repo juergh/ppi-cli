@@ -1,0 +1,17 @@
+#!/bin/bash -eu
+#
+# Show boot time
+#
+
+. ./lib.sh
+
+do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} \
+				run "${SUB_ARGS[@]}" "sudo dmesg"
+
+echo
+echo "-- Boot times:"
+for host in "${HOSTS[@]}" ; do
+	link_ready=$(grep 'eth0: link becomes ready' "${host}".log | \
+					 sed -e 's/.*\[\s\s*//' -e 's/\].*//')
+	printf "%-25s: %s\n" "${host}" "${link_ready}"
+done
