@@ -3,7 +3,6 @@
 # Reboot systems
 #
 
-. ./env.sh
-cat | ./run-parallel \
-		  target-pi-cli "${RPI_MASTER}" {} \
-		  reboot "${@}"
+. ./lib.sh
+
+do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} reboot "${SUB_ARGS[@]}"
