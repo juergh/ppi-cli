@@ -17,7 +17,7 @@ EOF
 
 # Set globals
 # shellcheck disable=SC2034
-RPI_MASTER=rpi-master:5000
+RPI_MASTER=ozzy:5000
 PATH=../bottle-pi:${PATH}
 
 # Parse the commandline arguments
