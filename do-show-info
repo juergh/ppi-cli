@@ -5,4 +5,4 @@
 
 . ./lib.sh
 
-do_run-parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} info "${SUB_ARGS[@]}"
+do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} info "${SUB_ARGS[@]}"
