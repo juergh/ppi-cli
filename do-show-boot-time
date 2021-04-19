@@ -6,7 +6,7 @@
 . ./lib.sh
 
 do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} \
-				run "${SUB_ARGS[@]}" "sudo dmesg"
+				run "${SUB_ARGS[@]}" "sudo dmesg" || true
 
 echo
 echo "-- Boot times:"
