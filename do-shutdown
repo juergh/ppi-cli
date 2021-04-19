@@ -1,0 +1,8 @@
+#!/bin/bash -u
+#
+# Shutdown (and poweroff) systems
+#
+
+. ./lib.sh
+
+run_parallel shutdown
