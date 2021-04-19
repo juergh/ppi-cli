@@ -1,0 +1,8 @@
+#!/bin/bash -u
+#
+# Update systems
+#
+
+. ./lib.sh
+
+run_parallel update
