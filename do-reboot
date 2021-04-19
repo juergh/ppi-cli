@@ -1,8 +1,8 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 #
 # Reboot systems
 #
 
 . ./lib.sh
 
-do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} reboot "${SUB_ARGS[@]}"
+run_parallel reboot
