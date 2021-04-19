@@ -13,7 +13,7 @@ function usage()
 
 	args=
 	cat <<EOF
-Usage: $(basename "${0}") [-l LEVEL] [-q] \
+Usage: $(basename "${0}") [-l {0,1,2,3,4}] [-q] \
 $(target-pi-cli foo bar "${cmd}" -h | head -1 | sed "s,.* ${cmd} ,,")
 
 $(target-pi-cli foo bar ${cmd} -h | tail -n +3)
