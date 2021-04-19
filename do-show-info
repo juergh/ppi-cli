@@ -1,8 +1,0 @@
-#!/bin/bash -eu
-#
-# Show system information
-#
-
-. ./lib.sh
-
-do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} info "${SUB_ARGS[@]}"

@@ -81,6 +81,11 @@ function do_run()
 	do_run_single "${host}" "${cmd[@]}"
 }
 
+if [ -t 0 ] ; then
+	echo "Unable to read hostname(s) from standard input" >&2
+	exit 2
+fi
+
 # Read the hosts from stdin
 HOSTS=()
 while read -r host ; do
@@ -105,5 +110,5 @@ for host in "${HOSTS[@]}"; do
 done
 
 # Wait for all commands to finish
-echo "-- Wait for command(s) to finish"
+echo -n "-- Wait for command(s) to finish "
 wait

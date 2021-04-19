@@ -1,13 +1,12 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 #
 # Show system state
 #
 
 . ./lib.sh
 
-do_run_parallel target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} state "${SUB_ARGS[@]}"
+run_parallel state
 
-echo
 echo "-- System states:"
 for host in "${HOSTS[@]}" ; do
 	state=$(tail -2 "${host}".log | head -1)
