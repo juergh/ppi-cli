@@ -36,7 +36,7 @@ function run_parallel()
 	fi
 	# Run the command in parallel on the provided hosts
 	printf "%s\n" "${HOSTS[@]}" | \
-		./run-parallel target-pi-cli "${ARGS[@]}" ozzy:5000 {} "${cmd}" \
+		./run-parallel -- target-pi-cli "${ARGS[@]}" ozzy:5000 {} "${cmd}" \
 					   "${SUB_ARGS[@]}" "${@}"
 }
 
