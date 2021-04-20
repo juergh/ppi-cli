@@ -1,0 +1,21 @@
+#!/bin/bash -eu
+#
+# Connect to the serial consoles
+#
+
+. ./lib.sh
+				 
+i=0
+for r in $(seq 0 1) ; do
+	for c in $(seq 0 3) ; do
+		x=$((c * 820))
+		y=$((r * 570))
+		gnome-terminal --geometry "80x24+${x}+${y}" -- \
+					   console -M ozzy -p 3109 -U "${HOSTS[${i}]}"
+
+		i=$((i + 1))
+		if [ ${i} -eq ${#HOSTS[@]} ] ; then
+			exit
+		fi
+	done
+done
