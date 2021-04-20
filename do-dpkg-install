@@ -1,21 +1,31 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 #
-# Upload and install Debian package(s)
+# Upload and install packages
 #
+
+# Remove the files from the commandline arguments
+files=()
+args=()
+while [ ${#} -gt 0 ] ; do
+	if [ -e "${1}" ]  ; then
+		files+=("${1}")
+	else
+		args+=("${1}")
+	fi
+	shift
+done
+set -- "${args[@]}"
+
+if [ ${#files[@]} -eq 0 ] ; then
+	echo "No Debian packages to install" >&2
+	exit 2
+fi
 
 . ./lib.sh
 
-locals=()
-remotes=()
-for f in "${@}" ; do
-	if ! [ -f "${f}" ] ; then
-		echo "No such file: ${f}" >&2
-		exit 1
-	fi
-	locals+=("${f}")
-	remotes+=("/tmp/${f##*/}")
-done
+tmpd=$(mktemp -d -u)
 
-do_run_parallel \
-	target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} put "${SUB_ARGS[@]}" "${locals[@]}" /tmp \; \
-	target-pi-cli "${ARGS[@]}" "${RPI_MASTER}" {} run "${SUB_ARGS[@]}" "sudo apt-get --yes update && sudo dpkg -i ${remotes[*]}"
+run_parallel run "mkdir ${tmpd}"
+run_parallel put "${files[@]}" "${tmpd}"
+run_parallel run "sudo dpkg -i ${tmpd}/* | sudo tee /dev/console"
+run_parallel run "rm -rf ${tmpd}"
