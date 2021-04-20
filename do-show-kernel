@@ -5,7 +5,7 @@
 
 . ./lib.sh
 
-run_parallel info
+run_parallel -- info
 
 echo "-- Kernel versions:"
 for host in "${HOSTS[@]}" ; do

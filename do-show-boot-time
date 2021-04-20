@@ -5,7 +5,7 @@
 
 . ./lib.sh
 
-run_parallel run "sudo dmesg"
+run_parallel -- run "sudo dmesg"
 
 echo "-- Boot times:"
 for host in "${HOSTS[@]}" ; do

@@ -25,7 +25,7 @@ fi
 
 tmpd=$(mktemp -d -u)
 
-run_parallel run "mkdir ${tmpd}"
-run_parallel put "${files[@]}" "${tmpd}"
-run_parallel run "sudo dpkg -i ${tmpd}/* | sudo tee /dev/console"
-run_parallel run "rm -rf ${tmpd}"
+run_parallel -- run "mkdir ${tmpd}"
+run_parallel -- put "${files[@]}" "${tmpd}"
+run_parallel -- run "sudo dpkg -i ${tmpd}/* | sudo tee /dev/console"
+run_parallel -- run "rm -rf ${tmpd}"

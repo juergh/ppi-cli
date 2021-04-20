@@ -5,4 +5,4 @@
 
 . ./lib.sh
 
-run_parallel update
+run_parallel -- update

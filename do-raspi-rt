@@ -13,4 +13,4 @@ cmds=(
 	"./run-all-tests"
 )
 
-run_parallel run "${cmds[*]}"
+run_parallel -- run "${cmds[*]}"
