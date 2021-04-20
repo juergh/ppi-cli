@@ -1,0 +1,12 @@
+#!/bin/bash -u
+#
+# Run the raspi-rt tests
+#
+
+. ./lib.sh
+
+run_parallel run "rm -rf raspi-rt && \
+git clone https://git.launchpad.net/~juergh/+git/raspi-rt && \
+cd raspi-rt && \
+sudo ./install-deps && \
+./run-all-tests"

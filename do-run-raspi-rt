@@ -1,9 +1,0 @@
-#!/bin/bash -eu
-#
-# Run the raspi-rt tests
-#
-
-. ./lib.sh
-
-do_run_parallel target-pi-cli "${RPI_MASTER}" {} \
-				run "rm -rf raspi-rt && git clone https://git.launchpad.net/~juergh/+git/raspi-rt && cd raspi-rt && ./tests/*"
