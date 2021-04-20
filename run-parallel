@@ -21,13 +21,17 @@ function out()
 				;;
 			*)
 				result=$(pr_failed)
-				fail=1
+				fail=$((fail + 1))
 				;;
 		esac
 		printf "%-25s: %s\n" "${host}" "${result}"
 	done
 
-	if [ "${rc}" -eq 0 ] && [ "${fail}" -eq 1 ] ; then
+	if [ "${FAIL_ALL}" -eq 1 ] && [ "${#HOSTS[@]}" -eq "${fail}" ] ; then
+		rc=1
+	fi
+
+	if [ "${rc}" -eq 0 ] && [ "${fail}" -ne 0 ] ; then
 		rc=1
 	fi
 
@@ -80,6 +84,50 @@ function do_run()
 	done
 	do_run_single "${host}" "${cmd[@]}"
 }
+
+function usage()
+{
+	cat <<EOF
+Usage: run-parallel [-a] [-h] -- PROGRAM [ARG...] [\; PROGRAM [ARG...]...]
+
+Run the provided program(s) in parallel.
+
+Optional arguments:
+  -a, --fail-all  Exit with a non-zero status only if all parallel program
+                  executions fail.
+  -h, --help      Show this help text and exit.
+EOF
+}
+
+# -----------------------------------------------------------------------------
+# Main entry point
+
+FAIL_ALL=0
+while [ ${#} -gt 0 ] ; do
+	case "${1}" in
+		-a|--fail-all)
+			FAIL_ALL=1
+			;;
+		-h|--help)
+			usage
+			exit
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			echo "Invalid argument: ${1}" >&2
+			exit 1
+			;;
+	esac
+	shift
+done
+
+if [ ${#} -eq 0 ] ; then
+	usage
+	exit 2
+fi
 
 if [ -t 0 ] ; then
 	echo "Unable to read hostname(s) from standard input" >&2
