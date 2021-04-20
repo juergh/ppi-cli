@@ -34,19 +34,6 @@ function run_parallel()
 		usage "${cmd}"
 		exit
 	fi
-
-	if [ -t 0 ] ; then
-		echo "Unable to read hostname(s) from standard input" >&2
-		exit 2
-	fi
-
-	# Read the hosts from stdin
-	HOSTS=()
-	while read -r host ; do
-		HOSTS+=("${host}")
-		echo "${host}"
-	done
-
 	# Run the command in parallel on the provided hosts
 	printf "%s\n" "${HOSTS[@]}" | \
 		./run-parallel target-pi-cli "${ARGS[@]}" ozzy:5000 {} "${cmd}" \
@@ -79,4 +66,15 @@ while [ ${#} -gt 0 ] ; do
 			;;
 	esac
 	shift
+done
+
+if [ -t 0 ] ; then
+	echo "Unable to read hostname(s) from standard input" >&2
+	exit 2
+fi
+
+# Read the hosts from stdin
+HOSTS=()
+while read -r host ; do
+	HOSTS+=("${host}")
 done
