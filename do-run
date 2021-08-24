@@ -1,0 +1,8 @@
+#!/bin/bash -u
+#
+# Reboot systems
+#
+
+. ./lib.sh
+
+run_parallel -- run "$@"
