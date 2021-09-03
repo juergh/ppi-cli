@@ -6,9 +6,11 @@
 . ./lib.sh
 
 cmds=(
-	"sudo apt-get -y update &&"
-	"sudo apt-get -y dist-upgrade &&"
-	"sudo reboot"
+	"sudo bash -c '"
+	"apt-get -y update &&"
+	"apt-get -y dist-upgrade &&"
+	"reboot"
+	"' 2>&1 | sudo tee /dev/console"
 )
 
 run_parallel -- run "${cmds[*]}"

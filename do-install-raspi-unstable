@@ -4,11 +4,13 @@
 #
 
 cmds=(
-	"sudo apt-add-repository --yes --no-update --pocket proposed &&"
-	"sudo apt-add-repository --yes --no-update --ppa ppa:canonical-kernel-team/bootstrap &&"
-	"sudo apt-add-repository --yes --no-update --ppa ppa:canonical-kernel-team/unstable &&"
-	"sudo apt-get --yes update &&"
-	"sudo apt-get --yes install linux-raspi-unstable"
+	"sudo bash -c '"
+	"apt-add-repository --yes --no-update --pocket proposed &&"
+	"apt-add-repository --yes --no-update --ppa ppa:canonical-kernel-team/bootstrap &&"
+	"apt-add-repository --yes --no-update --ppa ppa:canonical-kernel-team/unstable &&"
+	"apt-get --yes update &&"
+	"apt-get --yes install linux-raspi-unstable"
+	"' 2>&1 | sudo tee /dev/console"
 )
 
 . ./lib.sh

@@ -6,11 +6,13 @@
 . ./lib.sh
 
 cmds=(
+	"bash -c '"
 	"rm -rf raspi-rt &&"
 	"git clone https://git.launchpad.net/~juergh/+git/raspi-rt &&"
 	"cd raspi-rt &&"
 	"sudo ./install-deps &&"
 	"./run-all-tests"
+	"' 2>&1 | sudo tee /dev/console"
 )
 
 run_parallel -- run "${cmds[*]}"
