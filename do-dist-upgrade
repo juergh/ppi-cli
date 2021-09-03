@@ -1,0 +1,14 @@
+#!/bin/bash -u
+#
+# Perform a dist upgrade
+#
+
+. ./lib.sh
+
+cmds=(
+	"sudo apt-get -y update &&"
+	"sudo apt-get -y dist-upgrade &&"
+	"sudo reboot"
+)
+
+run_parallel -- run "${cmds[*]}"
