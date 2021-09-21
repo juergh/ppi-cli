@@ -1,0 +1,16 @@
+#!/bin/bash -u
+#
+# Perform an upgrade
+#
+
+. ./lib.sh
+
+cmds=(
+	"sudo bash -c '"
+	"apt-get -y update &&"
+	"apt-get -y -o Dpkg::Options::='--force-confdef' upgrade &&"
+	"reboot"
+	"' 2>&1 | sudo tee /dev/console"
+)
+
+run_parallel -- run "${cmds[*]}"
