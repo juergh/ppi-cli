@@ -8,7 +8,7 @@
 cmds=(
 	"sudo bash -c '"
 	"apt-get -y update &&"
-	"apt-get -y dist-upgrade &&"
+	"apt-get -y -o Dpkg::Options::='--force-confdef' dist-upgrade &&"
 	"reboot"
 	"' 2>&1 | sudo tee /dev/console"
 )
