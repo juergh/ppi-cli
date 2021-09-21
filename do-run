@@ -5,4 +5,4 @@
 
 . ./lib.sh
 
-run_parallel -- run "$@"
+run_parallel -- run "bash -c '${*}' 2>&1 | sudo tee /dev/console"
