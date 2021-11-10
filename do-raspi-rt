@@ -8,6 +8,7 @@
 cmds=(
 	"bash -c '"
 	"rm -rf raspi-rt &&"
+	"git config --global http.sslverify false &&"
 	"git clone https://git.launchpad.net/~juergh/+git/raspi-rt &&"
 	"cd raspi-rt &&"
 	"sudo ./install-deps &&"
