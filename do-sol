@@ -6,7 +6,7 @@
 . ./lib.sh
 				 
 i=0
-for r in $(seq 0 1) ; do
+for r in $(seq 0 2) ; do
 	for c in $(seq 0 3) ; do
 		x=$((c * 820))
 		y=$((r * 570))
