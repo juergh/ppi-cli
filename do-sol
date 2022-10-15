@@ -10,8 +10,9 @@ for r in $(seq 0 2) ; do
 	for c in $(seq 0 3) ; do
 		x=$((c * 820))
 		y=$((r * 570))
-		gnome-terminal --geometry "80x24+${x}+${y}" -- \
-					   console -M ozzy -p 3109 -U "${HOSTS[${i}]}"
+		host=${HOSTS[${i}]}
+		gnome-terminal --geometry "80x24+${x}+${y}" --title "${host}" -- \
+					   console -M ozzy -p 3109 -U "${host}"
 
 		i=$((i + 1))
 		if [ ${i} -eq ${#HOSTS[@]} ] ; then
