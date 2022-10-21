@@ -1,0 +1,16 @@
+#!/bin/bash -u
+#
+# Perform a dist upgrade using the proposed pocket
+#
+
+. ./lib.sh
+
+cmds=(
+	"sudo bash -c '"
+	"apt-add-repository -y -p proposed &&"
+	"apt-get -y -o Dpkg::Options::='--force-confdef' dist-upgrade &&"
+	"reboot"
+	"' 2>&1 | sudo tee /dev/console"
+)
+
+run_parallel -- run "${cmds[*]}"

@@ -1,0 +1,16 @@
+#!/bin/bash -eu
+#
+# Install package(s)
+#
+
+cmds=(
+	"sudo bash -c '"
+	"apt-add-repository --yes --no-update --pocket proposed &&"
+	"apt-get --yes update &&"
+	"apt-get --yes install linux-raspi"
+	"' 2>&1 | sudo tee /dev/console"
+)
+
+. ./lib.sh
+
+run_parallel -- run "${cmds[*]}"
