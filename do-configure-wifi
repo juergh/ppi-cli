@@ -14,4 +14,11 @@ trap "rm -f 90-wifi.yaml" EXIT
 
 # Bring up wlan0
 run_parallel -- put 90-wifi.yaml /tmp
-run_parallel -- run "sudo bash -c 'mv /tmp/90-wifi.yaml /etc/netplan/ && netplan apply' 2>&1 | sudo tee /dev/console"
+cmds=(
+	"sudo bash -c '"
+	"test -e /sys/class/net/wlan0 &&"
+	"mv /tmp/90-wifi.yaml /etc/netplan/ &&"
+	"netplan apply"
+	"' 2>&1 | sudo tee /dev/console"
+)
+run_parallel -- run "${cmds[*]}"
