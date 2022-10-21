@@ -1,0 +1,8 @@
+network:
+    wifis:
+        wlan0:
+            dhcp4: true
+            access-points:
+                "${SSID}":
+                    password: "${PASSPHRASE}"
+    version: 2

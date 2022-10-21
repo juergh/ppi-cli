@@ -1,0 +1,17 @@
+#!/bin/bash -u
+#
+# Configure wifi
+#
+
+. ./lib.sh
+
+readarray -t wifi < <(pass show local/wifi | sed 's,.*:\s*,,')
+export SSID=${wifi[0]}
+export PASSPHRASE=${wifi[1]}
+
+envsubst < wifi.yaml > 90-wifi.yaml
+trap "rm -f 90-wifi.yaml" EXIT
+
+# Bring up wlan0
+run_parallel -- put 90-wifi.yaml /tmp
+run_parallel -- run "sudo bash -c 'mv /tmp/90-wifi.yaml /etc/netplan/ && netplan apply' 2>&1 | sudo tee /dev/console"

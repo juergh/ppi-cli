@@ -1,0 +1,22 @@
+#!/bin/bash -u
+#
+# Test wifi
+#
+
+. ./lib.sh
+
+# Get the IP addresses into the log files
+run_parallel -- run 'ip a'
+
+echo "-- SSH to wlan0"
+for host in "${HOSTS[@]}" ; do
+	ip=$(grep -P '\s+inet .* wlan0"' "${host}".log)
+	ip=${ip#* inet }
+	ip=${ip%%/*}
+	printf "%-25s : " "${host}"
+	if [ -z "${ip}" ] ; then
+		echo "No wlan0 IP"
+	else
+		ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@"${ip}" uname -a
+	fi
+done
