@@ -1,6 +1,7 @@
 network:
     wifis:
         wlan0:
+            optional: true
             dhcp4: true
             access-points:
                 "${SSID}":
