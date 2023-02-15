@@ -1,6 +1,6 @@
 #!/bin/bash
 
 for f in do-* ; do
-	echo "alias ppi-arm64--${f#do-}='( cd $(pwd); cat raspi-arm64.hosts | ./${f} )'"
-	echo "alias ppi-armhf--${f#do-}='( cd $(pwd); cat raspi-armhf.hosts | ./${f} )'"
+	echo "alias ppi-arm64--${f#do-}='cat $(pwd)/raspi-arm64.hosts | $(pwd)/${f}'"
+	echo "alias ppi-armhf--${f#do-}='cat $(pwd)/raspi-armhf.hosts | $(pwd)/${f}'"
 done
