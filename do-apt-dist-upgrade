@@ -3,7 +3,8 @@
 # Perform a dist upgrade
 #
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 cmds=(
 	"sudo bash -c '"

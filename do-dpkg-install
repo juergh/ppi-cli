@@ -21,7 +21,8 @@ if [ ${#files[@]} -eq 0 ] ; then
 	exit 2
 fi
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 tmpd=$(mktemp -d -u)
 

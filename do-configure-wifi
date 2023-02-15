@@ -3,7 +3,8 @@
 # Configure wifi
 #
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 readarray -t wifi < <(pass show local/wifi | sed 's,.*:\s*,,')
 export SSID=${wifi[0]}

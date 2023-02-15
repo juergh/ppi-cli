@@ -13,6 +13,7 @@ cmds=(
 	"' 2>&1 | sudo tee /dev/console"
 )
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 run_parallel -- run "${cmds[*]}"

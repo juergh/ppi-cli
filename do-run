@@ -1,8 +1,9 @@
 #!/bin/bash -u
 #
-# Reboot systems
+# Run arbitary commands
 #
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 run_parallel -- run "bash -c '${*}' 2>&1 | sudo tee /dev/console"

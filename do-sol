@@ -3,7 +3,8 @@
 # Connect to the serial consoles
 #
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 				 
 i=0
 for r in $(seq 0 2) ; do

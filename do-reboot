@@ -3,6 +3,7 @@
 # Reboot systems
 #
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 run_parallel -- reboot

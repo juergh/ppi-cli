@@ -4,7 +4,8 @@
 #
 
 # Set globals
-PATH=../bottle-pi:${PATH}
+HERE=$(dirname "$(readlink -f "${0}")")
+PATH=${HERE}:${HERE}/../bottle-pi:${PATH}
 
 function run_parallel()
 {
@@ -30,7 +31,7 @@ function run_parallel()
 
 	# Run the command in parallel on the provided hosts
 	printf "%s\n" "${HOSTS[@]}" | \
-		./run-parallel "${args[@]}" -- pi-cli 192.168.99.11:5000 {} "${@}"
+		run-parallel "${args[@]}" -- pi-cli 192.168.99.11:5000 {} "${@}"
 }
 
 # -----------------------------------------------------------------------------

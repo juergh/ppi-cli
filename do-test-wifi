@@ -3,7 +3,8 @@
 # Test wifi
 #
 
-. ./lib.sh
+here=$(dirname "$(readlink -f "${0}")")
+. "${here}"/lib.sh
 
 # Get the IP addresses into the log files
 run_parallel -- run 'ip a'
