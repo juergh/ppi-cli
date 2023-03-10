@@ -1,10 +1,7 @@
 #!/bin/bash
 
-for f in show-state ; do
-	echo "alias ppi-all--${f}='cat $(pwd)/raspi-all.hosts | $(pwd)/do-${f}'"
-done
-
 for f in do-* ; do
+	echo "alias ppi-all--${f#do-}='cat $(pwd)/raspi-all.hosts | $(pwd)/${f}'"
 	echo "alias ppi-arm64--${f#do-}='cat $(pwd)/raspi-arm64.hosts | $(pwd)/${f}'"
 	echo "alias ppi-armhf--${f#do-}='cat $(pwd)/raspi-armhf.hosts | $(pwd)/${f}'"
 done
