@@ -10,7 +10,7 @@ run_parallel -- run "sudo dmesg"
 
 echo "-- Boot times:"
 for host in "${HOSTS[@]}" ; do
-	link_ready=$(grep 'eth0: link becomes ready' "${host}".log | \
+	link_ready=$(grep 'eth0: link becomes ready' "${LOG_DIR}"/"${host}".log | \
 					 sed -e 's/.*\[\s\s*//' -e 's/\].*//')
 	printf "%-25s: %s\n" "${host}" "${link_ready}"
 done

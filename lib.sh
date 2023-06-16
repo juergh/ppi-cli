@@ -6,6 +6,7 @@
 # Set globals
 HERE=$(dirname "$(readlink -f "${0}")")
 PATH=${HERE}:${HERE}/../bottle-pi:${PATH}
+LOG_DIR=${HOME}/.cache/ppi-cli
 
 function run_parallel()
 {
@@ -41,6 +42,9 @@ if [ -t 0 ] ; then
 	echo "Unable to read hostname(s) from standard input" >&2
 	exit 2
 fi
+
+# Initialize the log directory
+mkdir -p "${LOG_DIR}"
 
 # Read the hosts from stdin
 HOSTS=()

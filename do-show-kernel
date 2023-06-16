@@ -11,6 +11,6 @@ run_parallel -- info
 echo "-- Kernel versions:"
 for host in "${HOSTS[@]}" ; do
 	kernel=$(awk '$1 == "\"Kernel\":" { print $4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14 }' \
-				 "${host}".log)
+				 "${LOG_DIR}"/"${host}".log)
 	printf "%-25s: %s\n" "${host}" "${kernel}"
 done

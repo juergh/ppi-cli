@@ -3,6 +3,8 @@
 function pr_passed() { echo -ne "\e[32mPASSED\e[0m" ; }
 function pr_failed() { echo -ne "\e[31mFAILED\e[0m" ; }
 
+LOG_DIR=${HOME}/.cache/ppi-cli
+
 function out()
 {
 	local rc=${?}
@@ -14,7 +16,7 @@ function out()
 	echo "-- Results:"
 	fail=0
 	for host in "${HOSTS[@]}" ; do
-		result=$(tail -1 "${host}".log)
+		result=$(tail -1 "${LOG_DIR}"/"${host}".log)
 		case "${result}" in
 			PASSED)
 				result=$(pr_passed)
@@ -48,13 +50,13 @@ function do_run_single()
 		return
 	fi
 
-	echo "RUN ${*}" >> "${host}".log
-	if "${@}" >> "${host}".log 2>&1 ; then
+	echo "RUN ${*}" >> "${LOG_DIR}"/"${host}".log
+	if "${@}" >> "${LOG_DIR}"/"${host}".log 2>&1 ; then
 		RESULT="PASSED"
 	else
 		RESULT="FAILED"
 	fi
-	echo "${RESULT}" >> "${host}".log
+	echo "${RESULT}" >> "${LOG_DIR}"/"${host}".log
 	echo -n "."
 }
 
@@ -64,7 +66,7 @@ function do_run()
 	shift
 	local cmd
 
-	true > "${host}".log
+	true > "${LOG_DIR}"/"${host}".log
 	cmd=()
 	while [ ${#} -gt 0 ] ; do
 		case "${1}" in
@@ -139,6 +141,9 @@ HOSTS=()
 while read -r host ; do
 	HOSTS+=("${host}")
 done
+
+# Initialize the log directory
+mkdir -p "${LOG_DIR}"
 
 trap out EXIT INT TERM HUP
 

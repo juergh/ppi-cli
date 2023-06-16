@@ -10,6 +10,6 @@ run_parallel -- state
 
 echo "-- System states:"
 for host in "${HOSTS[@]}" ; do
-	state=$(tail -2 "${host}".log | head -1)
+	state=$(tail -2 "${LOG_DIR}"/"${host}".log | head -1)
 	printf "%-25s: %s\n" "${host}" "${state}"
 done

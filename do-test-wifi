@@ -11,7 +11,7 @@ run_parallel -- run 'ip a'
 
 echo "-- SSH to wlan0"
 for host in "${HOSTS[@]}" ; do
-	ip=$(grep -P '\s+inet .* wlan0"' "${host}".log)
+	ip=$(grep -P '\s+inet .* wlan0"' "${LOG_DIR}"/"${host}".log)
 	ip=${ip#* inet }
 	ip=${ip%%/*}
 	printf "%-25s : " "${host}"
