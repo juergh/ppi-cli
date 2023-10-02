@@ -49,5 +49,8 @@ mkdir -p "${LOG_DIR}"
 # Read the hosts from stdin
 HOSTS=()
 while read -r host ; do
+	if [ -z "${host}" ] || [ "${host#\#}" != "${host}" ] ; then
+		continue
+	fi
 	HOSTS+=("${host}")
 done
